@@ -14,7 +14,7 @@ A test here proves what the **production API stores**, on a **free account** sha
 1. Read the issue (`gh issue view <id>`), the TC in `Test Cases for automation.md`, and the target file in `docs/test-architecture-plan.md`.
 2. Find the request/response schemas in `src/schemas/openapi.json` (create bodies have generated names such as `Body_37565102`; use the `Schema` map for responses).
 3. **Probe the real API** with a scratchpad script (`probe-template.mjs` in this folder, run with `node --env-file=.env`). Record status codes, defaults, field shapes, and free-plan behavior. Clean up what the probe created.
-4. Write the plan in `docs/superpowers/plans/<date>-tc-0XX-<name>.md`, including a "Probe results" table.
+4. Write the plan in `docs/superpowers/plans/<date>-tc-0XX-<name>.md`, including a "Probe results" table. The folder is git-ignored: the plan is a local working note, never committed. Probe findings reach the PR through its **Assumptions** section.
 5. Write the test (pattern below), then run the checks in the Done list.
 
 ## Test pattern

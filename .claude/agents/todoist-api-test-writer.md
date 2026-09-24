@@ -27,7 +27,7 @@ An issue id is required. Stop and report back if:
 ## Flow
 
 1. Start from the updated `main`: `git switch main` then `git pull`. Create the branch `<issue id>-<short-description>`.
-2. Follow skill workflow steps 1–5. For the probe, copy `probe-template.mjs` to the scratchpad and never commit it. Write the plan to `docs/superpowers/plans/`, then write the spec.
+2. Follow skill workflow steps 1–5. For the probe, copy `probe-template.mjs` to the scratchpad and never commit it. Write the plan to `docs/superpowers/plans/` (git-ignored, never commit it), then write the spec.
 3. Go through the whole skill **Done list**: repeat-each, full checks, mutation check, no leftovers, the ✅ mark, the `code-review` skill.
 4. Commit messages use the subject `#<issue id> <summary>` and end with the Co-Authored-By trailer.
 5. Push the branch, then run `gh pr create` with `.github/pull_request_template.md`. Put every probe finding under **Assumptions**, give a reason for every field left out, and end the body with the 🤖 Generated with Claude Code footer.
