@@ -23,7 +23,7 @@ Node 24 (`.nvmrc`). `npm ci` also installs the husky hooks. Copy `.env.example` 
 - **Auth:** there is no login. `src/clients/createApiContext.ts` creates an `APIRequestContext` with the base URL and a Bearer header built from `TODOIST_API_TOKEN` (`src/env.ts`).
 - **Clients** (`src/clients/`): `BaseClient` plus one thin client per resource, all combined in `TodoistApi` (the `api` fixture). Typed methods throw `ApiError` on non-2xx. `send(method, path, options)` returns the raw `APIResponse`, for status code assertions. `listAll` follows the `next_cursor` pagination of v1 list endpoints. Paths are relative to the API root (`tasks/123`).
 - **Fixtures** (`src/fixtures/index.ts`): tests import `test`, `expect` and `Schema` only from here. Fixtures:
-  - `api`
+  - `api`, built on `apiRequest` (the authenticated `APIRequestContext`, for calls no client covers)
   - `unauthenticatedApi` and `apiWithToken(token)` for the negative auth tests
   - `testData`
   - `account` and `accountTimezone` (worker scoped, read from `GET /user`)
