@@ -4,16 +4,16 @@ A set for the Tesena Fest 2026 workshop, Todoist API.
 
 ## Wave 1 - smoke
 
-- TC-001 [Projects] A new project is created and comes back under the name that was entered
-- TC-002 [Tasks] A new task is created with the text that was entered
-- TC-003 [Tasks] A new task is created with the due date that was entered
-- TC-004 [Labels] A new label is created under the name that was entered
-- TC-005 [Comments] A comment is added to a task with the text that was entered
+- ✅ TC-001 [Projects] A new project is created and comes back under the name that was entered
+- ✅ TC-002 [Tasks] A new task is created with the text that was entered
+- ✅ TC-003 [Tasks] A new task is created with the due date that was entered
+- ✅ TC-004 [Labels] A new label is created under the name that was entered
+- ✅ TC-005 [Comments] A comment is added to a task with the text that was entered
 
 ## Wave 2 - functional tests of a single feature
 
-- TC-006 [Projects] A renamed project loads under the new name the next time it is opened, not only in the response to the update
-- TC-007 [Tasks] A task can be created with the required fields only, and every optional field is stored exactly as it was entered
+- ✅ TC-006 [Projects] A renamed project loads under the new name the next time it is opened, not only in the response to the update
+- ✅ TC-007 [Tasks] A task can be created with the required fields only, and every optional field is stored exactly as it was entered
 - TC-008 [Tasks] A project's task list contains only the tasks of that project, nothing from elsewhere
 - TC-009 [Tasks] A due date entered in words lands on the same day as the same date entered explicitly
 
