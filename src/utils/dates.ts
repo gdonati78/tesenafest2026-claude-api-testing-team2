@@ -33,6 +33,26 @@ export function tomorrowIn(timeZone: string, now: Date = new Date()): string {
   return addDays(todayIn(timeZone, now), 1);
 }
 
+export type Weekday =
+  'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
+
+const WEEKDAYS: readonly Weekday[] = [
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+];
+
+/** The first `weekday` on or after `date` (`date` itself when it already is that weekday). */
+export function weekdayOnOrAfter(date: string, weekday: Weekday): string {
+  const [year, month, day] = parseDate(date);
+  const current = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+  return addDays(date, (WEEKDAYS.indexOf(weekday) - current + 7) % 7);
+}
+
 function parseDate(date: string): [number, number, number] {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
   if (!match) throw new Error(`Expected a YYYY-MM-DD date, got "${date}".`);
