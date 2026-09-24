@@ -1,0 +1,36 @@
+name: Sync labels
+
+# Creates or updates the labels listed in .github/labels.yml. Labels not listed there are kept.
+on:
+  push:
+    branches: [main]
+    paths: [.github/labels.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write # create and edit labels
+
+jobs:
+  sync:
+    name: Sync labels
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # yq is preinstalled on the GitHub-hosted Ubuntu runners.
+      - name: Create or update labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          yq -o=json '.[]' .github/labels.yml | jq -c '.' | while read -r label; do
+            name=$(jq -r '.name' <<< "$label")
+            gh label create "$name" \
+              --color "$(jq -r '.color' <<< "$label")" \
+              --description "$(jq -r '.description' <<< "$label")" \
+              --force
+          done

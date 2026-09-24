@@ -1,0 +1,97 @@
+name: Test case
+description: A test case to automate against the Todoist API.
+title: '[TC-XXX]: '
+labels: [test-case, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One issue per test case. Use the ID and wording from
+        [Test Cases for automation.md](https://github.com/gdonati78/tesenafest2026-claude-api-testing-team2/blob/main/Test%20Cases%20for%20automation.md) when the case is listed there.
+
+  - type: input
+    id: tc-id
+    attributes:
+      label: Test case ID
+      description: Becomes the `@TC-XXX` tag of the test.
+      placeholder: TC-016
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P0 - Critical (blocks the team or CI)
+        - P1 - High (needed for the current wave)
+        - P2 - Medium (planned, not urgent)
+        - P3 - Low (nice to have)
+      default: 1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Projects
+        - Tasks
+        - Labels
+        - Comments
+        - E2E
+    validations:
+      required: true
+
+  - type: dropdown
+    id: wave
+    attributes:
+      label: Wave
+      options:
+        - 1 - Smoke
+        - 2 - Functional, single feature
+        - 3 - End-to-end scenario
+        - 4 - Alternative scenario
+        - 5 - Critical negative scenario
+    validations:
+      required: true
+
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Scenario
+      description: What the user does and what must be true afterwards, in plain words.
+      placeholder: A task ticked off by mistake can be put back among the open ones, and it is the same task, not a new one.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps and expected results
+      placeholder: |
+        1. Create a task -> 200, task is open
+        2. Close the task -> 204
+        3. Reopen the task -> 204
+        4. Load the task -> same id, `checked` is false
+    validations:
+      required: true
+
+  - type: textarea
+    id: endpoints
+    attributes:
+      label: Endpoints
+      description: API endpoints the test calls.
+      placeholder: |
+        POST /api/v1/tasks
+        POST /api/v1/tasks/{task_id}/close
+        POST /api/v1/tasks/{task_id}/reopen
+      render: text
+
+  - type: checkboxes
+    id: tags
+    attributes:
+      label: Tags
+      options:
+        - label: '@smoke (runs hourly on main, keep it fast and stable)'

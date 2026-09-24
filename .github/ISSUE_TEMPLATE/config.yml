@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Todoist API documentation
+    url: https://developer.todoist.com/openapi.json
+    about: Questions about how the Todoist API itself behaves.
+  - name: Test architecture
+    url: https://github.com/gdonati78/tesenafest2026-claude-api-testing-team2/blob/main/docs/test-architecture-plan.md
+    about: How the framework is built. Read this before proposing framework changes.
