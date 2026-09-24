@@ -4,6 +4,8 @@ node_modules/
 .env
 .env.*
 !.env.example
+# Browser network captures contain auth tokens and cookies
+*.har
 
 # Playwright output
 playwright-report/
@@ -13,3 +15,6 @@ playwright/.cache/
 
 # Written by scripts/report-flaky.mts in CI
 flaky-report.md
+
+# Local scratch files
+/temp/
