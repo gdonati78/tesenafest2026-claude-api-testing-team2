@@ -14,13 +14,13 @@ A set for the Tesena Fest 2026 workshop, Todoist API.
 
 - ✅ TC-006 [Projects] A renamed project loads under the new name the next time it is opened, not only in the response to the update
 - ✅ TC-007 [Tasks] A task can be created with the required fields only, and every optional field is stored exactly as it was entered
-- TC-008 [Tasks] A project's task list contains only the tasks of that project, nothing from elsewhere
-- TC-009 [Tasks] A due date entered in words lands on the same day as the same date entered explicitly
+- ✅ TC-008 [Tasks] A project's task list contains only the tasks of that project, nothing from elsewhere
+- ✅ TC-009 [Tasks] A due date entered in words lands on the same day as the same date entered explicitly
 
 ## Wave 3 - end-to-end scenarios
 
 - TC-010 [E2E] A user creates a project, splits it into sections, adds a task with a due date to one of them, and finally ticks it off
-- TC-011 [E2E] A project from empty to done: three tasks, two ticked off, one still open at the end
+- ✅ TC-011 [E2E] A project from empty to done: three tasks, two ticked off, one still open at the end
 
 ## Wave 4 - alternative scenarios
 
