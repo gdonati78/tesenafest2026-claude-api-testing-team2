@@ -24,7 +24,7 @@ A set for the Tesena Fest 2026 workshop, Todoist API.
 
 ## Wave 4 - alternative scenarios
 
-- TC-012 [Tasks] A task ticked off by mistake can be put back among the open ones, and it is the same task, not a new one
+- ✅ TC-012 [Tasks] A task ticked off by mistake can be put back among the open ones, and it is the same task, not a new one
 - ✅ TC-013 [Tasks] A recurring task does not disappear when ticked off and moves on to its next due date
 
 ## Wave 5 - critical negative scenarios
