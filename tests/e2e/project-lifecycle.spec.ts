@@ -2,6 +2,8 @@ import type { Task } from '../../src/clients';
 import { uniqueName } from '../../src/data';
 import { expect, Schema, test } from '../../src/fixtures';
 
+const HOUR_MS = 60 * 60 * 1000;
+
 /** Ids sorted, so lists can be compared regardless of the order the API returns them in. */
 function ids(tasks: readonly Pick<Task, 'id'>[]): string[] {
   return tasks.map((task) => task.id).sort();
@@ -64,6 +66,20 @@ test(
       const loaded = await api.tasks.get(stillOpen.id);
       expect(loaded).toMatchSchema(Schema.task);
       expect(loaded.checked).toBe(false);
+    });
+
+    await test.step('Find the two closed tasks among the completed tasks of the project', async () => {
+      // A wide window, so clock drift between the runner and Todoist cannot hide the completions.
+      const now = Date.now();
+      const completed = await api.tasks.listCompletedByCompletionDate({
+        project_id: project.id,
+        since: new Date(now - HOUR_MS).toISOString(),
+        until: new Date(now + HOUR_MS).toISOString(),
+      });
+      for (const task of completed) {
+        expect(task).toMatchSchema(Schema.task);
+      }
+      expect(ids(completed)).toEqual(ids(toClose));
     });
   },
 );

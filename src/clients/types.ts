@@ -140,6 +140,15 @@ export interface TaskListQuery {
   ids?: string;
 }
 
+/** Query for `tasks/completed/by_completion_date`. `since` is inclusive, `until` exclusive. */
+export interface CompletedTasksQuery {
+  /** ISO 8601 date-time. */
+  since: string;
+  /** ISO 8601 date-time. */
+  until: string;
+  project_id?: string;
+}
+
 /** LabelRestView */
 export interface Label {
   id: string;
