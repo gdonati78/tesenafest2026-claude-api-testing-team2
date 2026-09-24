@@ -72,6 +72,7 @@ Keep the test and split out the paid part as its own case (`TC-00Xc`) with `test
 - `npm test`, `npm run lint`, `npm run format:check`, `npm run typecheck`
 - **Mutation check:** break one expected value, see the test fail, revert. Record it in the PR.
 - No `autotest-<run id>-` leftovers (list projects, labels and tasks)
+- Mark the TC with ✅ in `Test Cases for automation.md` once all its parts exist (fixme parts count)
 - Run the `code-review` skill on the diff and fix what it finds
 - PR body: every probe finding goes under **Assumptions**, and every field left out gets a reason
 - Move the issue to "In review" (command in CLAUDE.md)
