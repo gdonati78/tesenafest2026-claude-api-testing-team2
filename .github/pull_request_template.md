@@ -28,6 +28,7 @@ Closes #<!-- issue number; use "Refs #" if the issue should stay open -->
 - [ ] `npm run lint`, `npm run format:check` and `npm run typecheck` pass
 - [ ] `npm test` passes locally; new tests pass on repeated runs (`--repeat-each=3`)
 - [ ] New tests carry their `@TC-XXX` tag, and `@smoke` only when they are fast and stable
+- [ ] Implemented test cases are marked with ✅ in `Test Cases for automation.md`
 - [ ] Test data is created with `testData.create*` or `testData.track`, so it is cleaned up
 - [ ] No API token, `.env` contents or unredacted traces in code, logs or this description
 - [ ] README or `docs/` updated if behavior or usage changed

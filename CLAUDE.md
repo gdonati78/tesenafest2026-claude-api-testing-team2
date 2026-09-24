@@ -51,6 +51,7 @@ node scripts/update-openapi.mts                     # refresh the pinned spec by
 - If a feature is not on the free plan, mark the test `test.fixme()` with the reason.
 - If the expected result is unclear (e.g. status codes in TC-015), probe the real API first, assert the observed behavior, and list it as an assumption in the PR description.
 - Validate response bodies against the schema.
+- In the PR that implements a test case, mark its line in `Test Cases for automation.md` as done by adding ✅ after the bullet (`- ✅ TC-00X ...`). Mark a TC only when all its parts are implemented (`test.fixme()` parts count, with the reason given).
 
 ## Git workflow
 
