@@ -51,18 +51,19 @@ await test.step('Load the task again and check every field', async () => {
 
 ## Known API behavior (probed 2026-09-24, free plan)
 
-| Behavior                                                                                                                          | Consequence                                                                              |
-| --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `deadline_date` → 403 `PREMIUM_ONLY`                                                                                              | `test.fixme()` with that reason                                                          |
-| `duration` accepted (200) but stored as `null`                                                                                    | Silently dropped. Only a stored-value assertion catches it. Treat it as paid, so `fixme` |
-| `order` is stored as `child_order`                                                                                                | Assert `child_order`                                                                     |
-| `POST tasks/{id}/close` → **204**, empty body (spec says 200)                                                                     | Use `send`, assert 204, list as an assumption                                            |
-| Closed task: `checked: true`, `completed_at` set, gone from `GET tasks?project_id=`                                               |                                                                                          |
-| `GET tasks/completed/by_completion_date` works, but `next_cursor` is **absent**                                                   | Treat `undefined` as the last page (`?? null`)                                           |
-| No token or a bad token → 401 `{"error_tag":"UNAUTHORIZED","error_code":477,"http_code":401,…}`; the spec has no 401 body schema  | Assert the observed fields with `toMatchObject`, not `toMatchSchema`                     |
-| `due_string: "every day"` works on free: `due.date` = today (account tz), `is_recurring: true`                                    | No `fixme` for recurring due dates                                                       |
-| Closing a recurring task → 204; it stays open (`checked: false`, `completed_at: null`, same id, still listed), `due.date` + 1 day | Each close moves one occurrence. Assert on a reload, with `addDays(today, 1)`            |
-| A closed recurring task does **not** appear in `tasks/completed/by_completion_date`                                               | Don't look for recurring completions there                                               |
+| Behavior                                                                                                                                                             | Consequence                                                                              |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `deadline_date` → 403 `PREMIUM_ONLY`                                                                                                                                 | `test.fixme()` with that reason                                                          |
+| `duration` accepted (200) but stored as `null`                                                                                                                       | Silently dropped. Only a stored-value assertion catches it. Treat it as paid, so `fixme` |
+| `order` is stored as `child_order`                                                                                                                                   | Assert `child_order`                                                                     |
+| `POST tasks/{id}/close` → **204**, empty body (spec says 200)                                                                                                        | Use `send`, assert 204, list as an assumption                                            |
+| Closed task: `checked: true`, `completed_at` set, gone from `GET tasks?project_id=`                                                                                  |                                                                                          |
+| `POST tasks/{id}/reopen` → **204**, empty body (spec says 200), also on an already open task; reopened task keeps `id` and `added_at`, `completed_at` back to `null` | Use `send`, assert 204, list as an assumption                                            |
+| `GET tasks/completed/by_completion_date` works, but `next_cursor` is **absent**                                                                                      | Treat `undefined` as the last page (`?? null`)                                           |
+| No token or a bad token → 401 `{"error_tag":"UNAUTHORIZED","error_code":477,"http_code":401,…}`; the spec has no 401 body schema                                     | Assert the observed fields with `toMatchObject`, not `toMatchSchema`                     |
+| `due_string: "every day"` works on free: `due.date` = today (account tz), `is_recurring: true`                                                                       | No `fixme` for recurring due dates                                                       |
+| Closing a recurring task → 204; it stays open (`checked: false`, `completed_at: null`, same id, still listed), `due.date` + 1 day                                    | Each close moves one occurrence. Assert on a reload, with `addDays(today, 1)`            |
+| A closed recurring task does **not** appear in `tasks/completed/by_completion_date`                                                                                  | Don't look for recurring completions there                                               |
 
 Add new findings to this table.
 
