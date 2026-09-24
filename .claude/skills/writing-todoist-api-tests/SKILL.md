@@ -51,14 +51,15 @@ await test.step('Load the task again and check every field', async () => {
 
 ## Known API behavior (probed 2026-09-24, free plan)
 
-| Behavior                                                                            | Consequence                                                                              |
-| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `deadline_date` → 403 `PREMIUM_ONLY`                                                | `test.fixme()` with that reason                                                          |
-| `duration` accepted (200) but stored as `null`                                      | Silently dropped. Only a stored-value assertion catches it. Treat it as paid, so `fixme` |
-| `order` is stored as `child_order`                                                  | Assert `child_order`                                                                     |
-| `POST tasks/{id}/close` → **204**, empty body (spec says 200)                       | Use `send`, assert 204, list as an assumption                                            |
-| Closed task: `checked: true`, `completed_at` set, gone from `GET tasks?project_id=` |                                                                                          |
-| `GET tasks/completed/by_completion_date` works, but `next_cursor` is **absent**     | Treat `undefined` as the last page (`?? null`)                                           |
+| Behavior                                                                                                                         | Consequence                                                                              |
+| -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `deadline_date` → 403 `PREMIUM_ONLY`                                                                                             | `test.fixme()` with that reason                                                          |
+| `duration` accepted (200) but stored as `null`                                                                                   | Silently dropped. Only a stored-value assertion catches it. Treat it as paid, so `fixme` |
+| `order` is stored as `child_order`                                                                                               | Assert `child_order`                                                                     |
+| `POST tasks/{id}/close` → **204**, empty body (spec says 200)                                                                    | Use `send`, assert 204, list as an assumption                                            |
+| Closed task: `checked: true`, `completed_at` set, gone from `GET tasks?project_id=`                                              |                                                                                          |
+| `GET tasks/completed/by_completion_date` works, but `next_cursor` is **absent**                                                  | Treat `undefined` as the last page (`?? null`)                                           |
+| No token or a bad token → 401 `{"error_tag":"UNAUTHORIZED","error_code":477,"http_code":401,…}`; the spec has no 401 body schema | Assert the observed fields with `toMatchObject`, not `toMatchSchema`                     |
 
 Add new findings to this table.
 
@@ -79,10 +80,12 @@ Keep the test and split out the paid part as its own case (`TC-00Xc`) with `test
 
 ## Common mistakes
 
-| Mistake                                               | Fix                                                        |
-| ----------------------------------------------------- | ---------------------------------------------------------- |
-| Asserting status 200 only                             | Assert the stored values after a reload                    |
-| Trusting the spec's status code                       | Probe, then assert what you observed                       |
-| `api.tasks.send('POST', 'tasks', …)` without tracking | `testData.track('task', id)`, or use `testData.createTask` |
-| `expect(list).toEqual([a, b])` in response order      | Compare sorted ids, filtered by project                    |
-| Default values as the "entered" values                | Choose values that differ from the defaults                |
+| Mistake                                                     | Fix                                                                                                                                      |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Asserting status 200 only                                   | Assert the stored values after a reload                                                                                                  |
+| Trusting the spec's status code                             | Probe, then assert what you observed                                                                                                     |
+| `api.tasks.send('POST', 'tasks', …)` without tracking       | `testData.track('task', id)`, or use `testData.createTask`                                                                               |
+| `expect(list).toEqual([a, b])` in response order            | Compare sorted ids, filtered by project                                                                                                  |
+| Default values as the "entered" values                      | Choose values that differ from the defaults                                                                                              |
+| `npx playwright test --reporter=line` (or any `--reporter`) | It replaces the configured reporters, including the redaction reporter, so failure traces keep the real token. Keep the config reporters |
+| A "malformed" token built from the real one                 | Use a fixed fake value. Redaction only matches the whole real token                                                                      |
