@@ -12,6 +12,8 @@
 
 **Branch:** `18-tc-007-task-optional-fields` (already created from the updated `main`).
 
+**Outcome of Task 1 (probed 2026-09-24, free account):** `deadline_date` is rejected with 403 `PREMIUM_ONLY`; `duration` is accepted but stored as null (with `due_date`, `due_datetime`, `due_string` and without a due date). Both moved to TC-007c (`test.fixme()`). `order` is stored as `child_order`; the content-only defaults match Task 2.
+
 ## Global Constraints
 
 - Test titles: `TC-007a A task can be created with the required fields only`, `TC-007b Every optional field of a task is stored exactly as it was entered`.
