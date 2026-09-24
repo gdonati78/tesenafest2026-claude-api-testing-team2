@@ -1,0 +1,89 @@
+name: Bug report
+description: A test, the framework or CI does not work as expected.
+title: '[Bug]: '
+labels: [bug, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. **Never paste the API token**, `.env` contents or unredacted traces.
+        Search [open issues](https://github.com/gdonati78/tesenafest2026-claude-api-testing-team2/issues?q=is%3Aissue+is%3Aopen+label%3Abug) first to avoid a duplicate.
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How urgent is it? A maintainer may change it during triage.
+      options:
+        - P0 - Critical (blocks the team or CI)
+        - P1 - High (needed for the current wave)
+        - P2 - Medium (planned, not urgent)
+        - P3 - Low (nice to have)
+      default: 2
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Projects
+        - Tasks
+        - Labels
+        - Comments
+        - E2E
+        - Framework
+        - CI
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you saw, and what you expected instead.
+      placeholder: TC-003 fails because the due date comes back one day earlier than entered.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. `TEST_ENV=prod npx playwright test tests/tasks --grep @TC-003`
+        2. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error output
+      description: Relevant error message or log. Remove any token before pasting.
+      render: shell
+
+  - type: input
+    id: run-url
+    attributes:
+      label: CI run link
+      description: Link to the failing GitHub Actions run, if any.
+      placeholder: https://github.com/.../actions/runs/...
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: TEST_ENV, Node.js version, OS.
+      placeholder: TEST_ENV=prod, Node 24.x, macOS 15
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched the existing issues and this is not a duplicate.
+          required: true
+        - label: This issue contains no API token, `.env` contents or other secrets.
+          required: true

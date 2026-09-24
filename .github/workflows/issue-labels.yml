@@ -1,0 +1,61 @@
+name: Label issues from form
+
+# Issue forms cannot set labels from a dropdown, so this reads the "Priority" and "Area"
+# answers from the issue body and applies the matching labels. On an edit, the old
+# priority and area labels are replaced, so each issue keeps exactly one of each.
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+
+jobs:
+  label:
+    name: Apply priority and area labels
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Apply labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+        run: |
+          body=$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH")
+          current=$(jq -r '.issue.labels[].name' "$GITHUB_EVENT_PATH")
+
+          # The answer is the first non-empty line after the "### <heading>" line.
+          answer() {
+            printf '%s\n' "$body" | tr -d '\r' \
+              | awk -v h="### $1" '$0 == h { found = 1; next } found && NF { print; exit }'
+          }
+
+          case "$(answer Priority)" in
+            P0*) priority='priority: critical' ;;
+            P1*) priority='priority: high' ;;
+            P2*) priority='priority: medium' ;;
+            P3*) priority='priority: low' ;;
+            *)   priority='' ;;
+          esac
+
+          area_answer=$(answer Area)
+          case "$area_answer" in
+            Projects|Tasks|Labels|Comments|E2E|Framework|CI)
+              area="area: $(tr '[:upper:]' '[:lower:]' <<< "$area_answer")" ;;
+            *) area='' ;;
+          esac
+
+          args=()
+          for new in "$priority" "$area"; do
+            [ -z "$new" ] && continue
+            prefix="${new%%:*}:"
+            while read -r old; do
+              if [ -n "$old" ] && [ "$old" != "$new" ]; then args+=(--remove-label "$old"); fi
+            done < <(grep "^$prefix" <<< "$current" || true)
+            args+=(--add-label "$new")
+          done
+
+          if [ ${#args[@]} -gt 0 ]; then
+            gh issue edit "$NUMBER" "${args[@]}"
+          fi

@@ -1,0 +1,64 @@
+name: Enhancement
+description: Improve the framework, CI, tooling or documentation.
+title: '[Enhancement]: '
+labels: [enhancement, needs-triage]
+body:
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P0 - Critical (blocks the team or CI)
+        - P1 - High (needed for the current wave)
+        - P2 - Medium (planned, not urgent)
+        - P3 - Low (nice to have)
+      default: 2
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Framework
+        - CI
+        - Projects
+        - Tasks
+        - Labels
+        - Comments
+        - E2E
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is hard, slow or missing today?
+      placeholder: Every negative test repeats the same status code and error body checks.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      placeholder: Add an `expectApiError(response, status)` helper to the fixtures.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - [ ] Helper exported from `src/fixtures`
+        - [ ] TC-014 and TC-015 use it
+    validations:
+      required: true
