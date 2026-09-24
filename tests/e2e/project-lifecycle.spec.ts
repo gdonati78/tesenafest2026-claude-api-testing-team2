@@ -42,6 +42,9 @@ test(
 
     await test.step('List the open tasks of the project: exactly the three tasks', async () => {
       const open = await api.tasks.list({ project_id: project.id });
+      for (const task of open) {
+        expect(task).toMatchSchema(Schema.task);
+      }
       expect(ids(open)).toEqual(ids([...toClose, stillOpen]));
     });
 
@@ -54,6 +57,9 @@ test(
 
     await test.step('List the open tasks of the project: only the third task is left', async () => {
       const open = await api.tasks.list({ project_id: project.id });
+      for (const task of open) {
+        expect(task).toMatchSchema(Schema.task);
+      }
       expect(ids(open)).toEqual([stillOpen.id]);
     });
 
