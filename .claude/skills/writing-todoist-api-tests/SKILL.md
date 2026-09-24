@@ -14,7 +14,7 @@ A test here proves what the **production API stores**, on a **free account** sha
 1. Read the issue (`gh issue view <id>`), the TC in `Test Cases for automation.md`, and the target file in `docs/test-architecture-plan.md`.
 2. Find the request/response schemas in `src/schemas/openapi.json` (create bodies have generated names such as `Body_37565102`; use the `Schema` map for responses).
 3. **Probe the real API** with a scratchpad script (`probe-template.mjs` in this folder, run with `node --env-file=.env`). Record status codes, defaults, field shapes, and free-plan behavior. Clean up what the probe created.
-4. Write the plan in `docs/superpowers/plans/<date>-tc-0XX-<name>.md`, including a "Probe results" table.
+4. Write the plan in `docs/superpowers/plans/<date>-tc-0XX-<name>.md`, including a "Probe results" table. The folder is git-ignored: the plan is a local working note, never committed. Probe findings reach the PR through its **Assumptions** section.
 5. Write the test (pattern below), then run the checks in the Done list.
 
 ## Test pattern
@@ -61,6 +61,9 @@ await test.step('Load the task again and check every field', async () => {
 | `POST tasks/{id}/reopen` → **204**, empty body (spec says 200), also on an already open task; reopened task keeps `id` and `added_at`, `completed_at` back to `null` | Use `send`, assert 204, list as an assumption                                            |
 | `GET tasks/completed/by_completion_date` works, but `next_cursor` is **absent**                                                                                      | Treat `undefined` as the last page (`?? null`)                                           |
 | No token or a bad token → 401 `{"error_tag":"UNAUTHORIZED","error_code":477,"http_code":401,…}`; the spec has no 401 body schema                                     | Assert the observed fields with `toMatchObject`, not `toMatchSchema`                     |
+| `due_string: "every day"` works on free: `due.date` = today (account tz), `is_recurring: true`                                                                       | No `fixme` for recurring due dates                                                       |
+| Closing a recurring task → 204; it stays open (`checked: false`, `completed_at: null`, same id, still listed), `due.date` + 1 day                                    | Each close moves one occurrence. Assert on a reload, with `addDays(today, 1)`            |
+| A closed recurring task does **not** appear in `tasks/completed/by_completion_date`                                                                                  | Don't look for recurring completions there                                               |
 
 Add new findings to this table.
 
