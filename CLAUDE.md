@@ -57,4 +57,11 @@ node scripts/update-openapi.mts                     # refresh the pinned spec by
 - Issue → branch `<issue id>-<short-description>` → PR (use `.github/pull_request_template.md`).
 - Commit subject must match `#<issue id> <summary>` (enforced by `commit-msg`). `pre-commit` runs lint-staged; `pre-push` blocks pushes to `main`.
 - Never merge PRs. Review your own PR and fix findings; a human merges. Start the next issue only from the updated `main`. When a PR is ready, reply with its URL and a short summary.
+- Right after creating a PR, move its issue from "In progress" to "In review" on the Team Otter project board (user project 1 of `gdonati78`):
+
+  ```sh
+  item=$(gh project item-list 1 --owner gdonati78 --format json -L 200 --jq '.items[] | select(.content.type == "Issue" and .content.number == <issue id>) | .id')
+  gh project item-edit --project-id PVT_kwHOATtCIM4BkjKH --id "$item" --field-id PVTSSF_lAHOATtCIM4BkjKHzhjTXBs --single-select-option-id df73e18b
+  ```
+
 - CI: `pr.yml` (lint, format, typecheck, all tests; never `pull_request_target`) and `smoke.yml` (hourly `@smoke` on `main`, opens/comments on a `smoke-failure` issue). Both share a concurrency group because all runs use one Todoist account; CI uses 2 workers and 1 retry.
