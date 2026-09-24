@@ -47,6 +47,58 @@ test.describe('Due dates', () => {
       });
     },
   );
+
+  test(
+    'TC-013 A recurring task does not disappear when ticked off and moves on to its next due date',
+    { tag: ['@TC-013', '@regression'] },
+    async ({ api, testData, accountTimezone }) => {
+      const dueString = 'every day';
+
+      const { project, created, firstDate } =
+        await test.step(`Create a task due "${dueString}" in a new project`, async () => {
+          const project = await testData.createProject();
+          // Read "today" on both sides of the request: a run that crosses midnight in the
+          // account timezone may get either day, and the next date follows the stored one.
+          const todayBefore = todayIn(accountTimezone);
+          const created = await testData.createTask({
+            content: uniqueName('task'),
+            project_id: project.id,
+            due_string: dueString,
+          });
+          const todayAfter = todayIn(accountTimezone);
+          expect(created).toMatchSchema(Schema.task);
+          expect(created.due?.is_recurring).toBe(true);
+          const firstDate = created.due?.date ?? '';
+          expect([todayBefore, todayAfter]).toContain(firstDate);
+          return { project, created, firstDate };
+        });
+
+      await test.step('Close the task', async () => {
+        // Observed: 204 with an empty body; the pinned spec says 200.
+        const response = await api.tasks.send('POST', `tasks/${created.id}/close`);
+        expect(response.status()).toBe(204);
+      });
+
+      await test.step('Load the task again: still open and due on the next day', async () => {
+        const loaded = await api.tasks.get(created.id);
+        expect(loaded).toMatchSchema(Schema.task);
+        expect(loaded.id).toBe(created.id);
+        expect(loaded.checked).toBe(false);
+        expect(loaded.completed_at).toBeNull();
+        expect(loaded.due).toMatchObject({
+          date: addDays(firstDate, 1),
+          string: dueString,
+          is_recurring: true,
+        });
+      });
+
+      await test.step("The task is still in the project's open task list", async () => {
+        const open = await api.tasks.list({ project_id: project.id });
+        for (const task of open) expect(task).toMatchSchema(Schema.task);
+        expect(open.map((task) => task.id)).toEqual([created.id]);
+      });
+    },
+  );
 });
 
 /**
