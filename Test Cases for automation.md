@@ -30,4 +30,4 @@ A set for the Tesena Fest 2026 workshop, Todoist API.
 ## Wave 5 - critical negative scenarios
 
 - ✅ TC-014 [E2E] With no access token and with a malformed token the request fails with 401 and nothing is created
-- TC-015 [Tasks] A task with no text, with a required field missing, and with an unreadable due date is rejected
+- ✅ TC-015 [Tasks] A task with no text, with a required field missing, and with an unreadable due date is rejected
